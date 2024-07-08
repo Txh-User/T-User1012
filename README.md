@@ -4,7 +4,7 @@
 conda env create -f env.yml<br>
 conda activate superagg
 
-## Data description (will be released soon)
+## Data description (Upcoming Releases)
 "dataset.csv"<br>
 "rules.csv"<br>
 "groundtruth.csv"<br>
