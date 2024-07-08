@@ -1,0 +1,2 @@
+sensorID,boardName,ip,lf,timeStamp,sensorValue,type,recStat
+Temp_3,SWM09,192.*.*.*,R3-P15B,2023-04-01 00:22:42,68,nc,0

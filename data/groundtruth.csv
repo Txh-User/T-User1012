@@ -1,0 +1,2 @@
+sensorID,boardName,ip,lf,timeStamp,sensorValue,type,recStat
+Volt_1,CPM01,192.*.*.*,R3-P05B,2023-04-01 00:23:02,11.8,dnc,1

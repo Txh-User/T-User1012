@@ -1,0 +1,2 @@
+index,confidence,rules
+1,0.975,"('c1', 'b1', 'AL1') => ('c2', 'b2', 'AL2')"
