@@ -36,7 +36,7 @@ def generate_rules(rule_file_path):
 
             edge_set.add(tuple(node_pair))
 
-    save_pkl('./data/rules.pkl', edge_set)
+    save_pkl('../data/rules.pkl', edge_set)
     return edge_set
 
 def t_test(seq_1, seq_2):

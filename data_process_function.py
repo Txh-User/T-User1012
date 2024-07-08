@@ -1,4 +1,4 @@
-import tqdm
+from tqdm import tqdm
 from datetime import datetime
 
 def json_to_txt(input_data):
@@ -7,10 +7,10 @@ def json_to_txt(input_data):
     for row in tqdm(input_data, desc='json2txt'):
         sid = row[0]
         bid = row[1]
-        lf = row[7]
-        ctime = row[11][11:]
-        day = row[11][:10]
-        state = row[10]
+        lf = row[3]
+        ctime = row[4][11:]
+        day = row[4][:10]
+        state = row[6]
 
         positions = (sid, bid, lf)
 
@@ -22,7 +22,7 @@ def json_to_txt(input_data):
 
         result[day][positions].append((ctime, status_jduge_v0(state)))
 
-    # pf.save_pkl('./data/json2txt.pkl', result)
+    # pf.save_pkl('../data/json2txt.pkl', result)
     return result
 
 def txt_to_time_series(txt_data):

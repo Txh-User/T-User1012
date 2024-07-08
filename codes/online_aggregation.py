@@ -1,4 +1,6 @@
 import csv
+import sys
+sys.path.append('../')
 from tqdm import tqdm, trange
 import time
 import warnings
@@ -14,7 +16,7 @@ def data_preprocess(raw_data, delta):
 
     processed_data = data_pf.txt_to_time_series(txt_data) # txt -> csv
 
-    pf.save_pkl(f'./data/tsData{delta}.pkl', processed_data)
+    pf.save_pkl(f'../data/tsData{delta}.pkl', processed_data)
     
     return processed_data
 
@@ -152,8 +154,8 @@ def sensorTierAgg(test_data, delta):
 
     ob_agg_data = sorted(ob_agg_data, key = lambda x:x[4])
 
-    # pf.save_pkl(f'./data/sensorTierProcessed{delta}.pkl', ob_agg_data)
-    # ob_agg_data = pf.load_pkl(f'./data/sensorTierProcessed{delta}.pkl')
+    # pf.save_pkl(f'../data/sensorTierProcessed{delta}.pkl', ob_agg_data)
+    # ob_agg_data = pf.load_pkl(f'../data/sensorTierProcessed{delta}.pkl')
 
     return ob_agg_data
 
@@ -192,15 +194,15 @@ def systemTierAgg(ob_agg_data, rules_list, delta, window_clock_size):
     result = list(result_set)
     result = sorted(result, key = lambda x:x[4])
 
-    # pf.save_pkl(f'./data/systemTierProcessedData{delta}.pkl', result)
-    # result = pf.load_pkl(f'./data/systemTierProcessedData{delta}.pkl')
+    # pf.save_pkl(f'../data/systemTierProcessedData{delta}.pkl', result)
+    # result = pf.load_pkl(f'../data/systemTierProcessedData{delta}.pkl')
     
     evaluation(result)
     return result
 
 def evaluation(eval_data):
     aggLen = 528954
-    true_file = './data/groundtruth.csv'
+    true_file = '../data/groundtruth.csv'
     split_time = '2023-05-20 05:04:11'
 
     y_true = []
@@ -239,14 +241,14 @@ def main(raw_data, rules_list, delta):
 
     test_data = data_preprocess(raw_data, delta)
 
-    # test_data = pf.load_pkl('./data/tsData{}.pkl'.format(delta))
+    # test_data = pf.load_pkl('../data/tsData{}.pkl'.format(delta))
 
     starttime1 = time.perf_counter()
     sensorTierProcessedDate = sensorTierAgg(test_data, delta)
     endtime1 = time.perf_counter()
     print("sensorTierTime: {:.4f}s".format(endtime1 - starttime1))
 
-    sensorTier_data_save_path = f'./data/sensorTierDelta{delta}.csv'
+    sensorTier_data_save_path = f'../data/sensorTierDelta{delta}.csv'
     data_save(sensorTierProcessedDate, sensorTier_data_save_path)
 
     window_clock_size = 600
@@ -255,7 +257,7 @@ def main(raw_data, rules_list, delta):
     endtime2 = time.perf_counter()
     print("systemTierTime: {:.4f}s".format(endtime2 - starttime2))
 
-    systemTier_data_save_path = f'./data/systemTierDelta{delta}.csv'
+    systemTier_data_save_path = f'../data/systemTierDelta{delta}.csv'
     data_save(systemTierProcessedDate, systemTier_data_save_path)
 
 if __name__ == '__main__':

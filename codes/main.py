@@ -1,17 +1,21 @@
 import time
+import os
+import sys
+sys.path.append('../')
 import online_aggregation
 import public_fuction as pf
 
 def main():
-    test_data = pf.data_load('./data/dataset.csv')
+    test_data = pf.data_load('../data/dataset.csv')
 
-    # save_pkl('./data/dataset.pkl', test_data)
-    # test_data = pf.load_pkl('./data/dataset.pkl')
+    # save_pkl('../data/dataset.pkl', test_data)
+    # test_data = pf.load_pkl('../data/dataset.pkl')
 
-    rules_list = pf.generate_rules('./data/rules.csv')
+    rules_list = pf.generate_rules('../data/rules.csv')
     # rules_list = pf.load_pkl('./data/rules.pkl')
 
-    online_aggregation.main(test_data, rules_list, delta1=10)
+    delta = 10
+    online_aggregation.main(test_data, rules_list, delta)
 
 if __name__ == "__main__":
     start_time = time.perf_counter()
