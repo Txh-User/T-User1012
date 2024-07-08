@@ -1,13 +1,19 @@
 # SuperAgg
 
 ## Environment
-conda env create -f env.yml
+conda env create -f env.yml<br>
+
 conda activate superagg
 
 ## Data need in 'data'
-dataset.csv
-rules.pkl
-groundtruth.csv
+dataset.csv<br>
+
+example:
+
+rules.pkl<br>
+
+
+groundtruth.csv<br>
 
 ## Demo
 We provide a demo. Please run:
