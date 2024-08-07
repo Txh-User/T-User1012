@@ -1,4 +1,5 @@
 # SuperAgg
+SuperAgg is an alert aggregation framework dedicated to the out-of-band monitoring of supercomputer systems. It uses automatically pattern learning to detect potential patterns in alert bursts and pattern-aware aggregation strategies for redundant alert suppression. The learning and aggregation workflow should be generic for alert management, and even time series refinement. Please feel free for trying.
 
 ## Environment
 ```
@@ -10,10 +11,10 @@ conda activate superagg
 "dataset.csv"<br>
 "rules.csv"<br>
 "groundtruth.csv"<br>
-ps: The data has been recoded, should be modified to fit the system metrics before running.
+Note: The data has been desensitized. One should modify the data pharsing logic in the code to adapt to their own contexts.
 
 ## Demo
-We provide a demo. Please run:
+To run the toy demo, please use:
 ```
 python main.py
 ```
