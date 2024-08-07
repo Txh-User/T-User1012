@@ -28,15 +28,15 @@ def generate_rules(rule_file_path):
         header = next(reader)
         for line in reader:
             node_pair = []
-            nodes_str = line[2]
-            nodes_str = nodes_str.split("=>")
+            nodes_str = line[0]
+            nodes_str = nodes_str.split('->')
 
             for node in nodes_str:
                 node_pair.append(node)
 
             edge_set.add(tuple(node_pair))
 
-    save_pkl('../data/rules.pkl', edge_set)
+    # save_pkl('./data/rules.pkl', edge_set)
     return edge_set
 
 def t_test(seq_1, seq_2):
@@ -45,8 +45,8 @@ def t_test(seq_1, seq_2):
 
     t_statistic, p_value = stats.ttest_ind(seq_1, seq_2)
 
-    # print("t-statistic:", t_statistic)
-    # print("p-value:", p_value)
+    # print('t-statistic:', t_statistic)
+    # print('p-value:', p_value)
 
     alpha = 0.05
     return p_value < alpha
