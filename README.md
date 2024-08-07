@@ -2,7 +2,7 @@
 
 ## Environment
 ```
-conda env create -f env.yml<br>
+conda env create -f env.yml
 conda activate superagg
 ```
 
