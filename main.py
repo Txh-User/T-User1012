@@ -1,5 +1,5 @@
 import time
-import online_aggregation
+from SuperAgg import SuperAgg
 import public_fuction as pf
 
 def main() -> None:
@@ -11,8 +11,8 @@ def main() -> None:
     rules_list = pf.generate_rules('./data/rules.csv')
     # rules_list = pf.load_pkl('./data/rules.pkl')
 
-    delta = 10
-    online_aggregation.main(test_data, rules_list, delta)
+    superagg = SuperAgg()
+    superagg.run(test_data, rules_list)
 
 if __name__ == '__main__':
     st_time = time.perf_counter()
