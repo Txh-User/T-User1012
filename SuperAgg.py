@@ -15,7 +15,7 @@ class SuperAgg:
         txt_data = data_pf.json2txt(raw_data)
         processed_data = data_pf.txt2time_series(txt_data)
 
-        # pf.save_pkl(f'./data/tsData{delta}.pkl', processed_data)
+        pf.save_pkl(f'./data/tsData.pkl', processed_data)
         return processed_data
 
     def find_patterns_and_handle(self, data):
@@ -65,7 +65,6 @@ class SuperAgg:
             i = j
             ALit = processed_data[j - 1]
 
-            # window = processed_data[j: j + delta]
             while j < length and (sum(processed_data[j: j + self.delta]) / len(processed_data[j: j + self.delta]) != 1 and sum(processed_data[j: j + self.delta]) / len(processed_data[j: j + self.delta]) != 0):
                 collectPatternWindow.append(processed_data[j])
                 j += 1
@@ -92,74 +91,75 @@ class SuperAgg:
 
         return processed_data
 
-    def sensorTierAgg(self, test_data):
+    def sensorTierAgg(self, raw_data, test_data, delta):
+        raw_data_dict = {(i[0], i[1], i[2], i[5]): i for i in raw_data}
         sensorTierProcessedData = {}
         txt_data = {}
         ob_agg_data = []
 
-        for day, t in tqdm(test_data.items(), desc='sensorTier1'):
-            if day not in sensorTierProcessedData:
-                sensorTierProcessedData[day] = []
+        # for day, t in tqdm(test_data.items(), desc='sensorTier1'):
+        #     if day not in sensorTierProcessedData:
+        #         sensorTierProcessedData[day] = []
 
-            for row in t:
-                processed_data = []
-                pos = row[0]
-                processed_data.append(pos)
-                patternProcessedData = self.find_patterns_and_handle(row[1:], self.delta)
-                processed_data[1:] = patternProcessedData
-                sensorTierProcessedData[day].append(processed_data)
+        #     for row in t:
+        #         processed_data = []
+        #         pos = row[0]
+        #         processed_data.append(pos)
+        #         patternProcessedData = self.find_patterns_and_handle(row[1:])
+        #         processed_data[1:] = patternProcessedData
+        #         sensorTierProcessedData[day].append(processed_data)
         
-        for day, t in tqdm(sensorTierProcessedData.items(), desc='sensorTier2'):
-            if day not in txt_data:
-                txt_data[day] = {}
+        # for day, t in tqdm(sensorTierProcessedData.items(), desc='sensorTier2'):
+        #     if day not in txt_data:
+        #         txt_data[day] = {}
 
-            for row in t:
-                position = row[0]
-                if position not in txt_data:
-                    txt_data[day][position] = []
+        #     for row in t:
+        #         position = row[0]
+        #         if position not in txt_data:
+        #             txt_data[day][position] = []
 
-                for index, state in enumerate(row):
-                    if index == 0:
-                        continue
+        #         for index, state in enumerate(row[1:]):
+        #             preState = row[index - 1]
+        #             if state != preState and preState != position:
+        #                 current_time = day + ' ' + time.strftime('%H:%M:%S', time.gmtime(index))
+        #                 current_time_timestamp = str(int(datetime.strptime(current_time, "%Y-%m-%d %H:%M:%S").timestamp()))
+        #                 txt_data[day][position].append(current_time_timestamp)
+        
+        # pf.save_pkl(f'./data/sensor_txt_data.pkl', txt_data)
+        # txt_data = pf.load_pkl(f'./data/sensor_txt_data.pkl')
 
-                    preState = row[index - 1]
-                    if state != preState and preState != position:
-                        current_time = time.strftime('%H:%M:%S', time.gmtime(index))
-                        current_status = state
-                        txt_data[day][position].append((current_time, current_status))
+        # for _, t in tqdm(txt_data.items(), desc='sensorTier3'):
+        #     for key, value in t.items():
+        #         for st in value:
+        #             new_key = (*key, st)
+        #             if new_key in raw_data_dict:
+        #                 ob_agg_data.append(raw_data_dict[new_key])
 
-        for day, t in txt_data.items():
-            for key, value in t.items():
-                sid = key[0]
-                bid = key[1]
-                lf = key[2]
-                for index, data in enumerate(value):
-                    timestamp = day + ' ' + data[0]
-                    state_code = data[1]
-                    if len(value) == 1:
-                        if state_code == 0:
-                            state = 'dnc'
-                        else:
-                            state = data_pf.status_jduge_v1(state_code)
-                    else:
-                        if state_code == 0 and index != 0:
-                            state = data_pf.status_jduge_v2(value[index-1][1], value[index][1])
-                        elif state_code == 0 and index == 0:
-                            state = data_pf.status_jduge_v2(value[index][1], value[index+1][1])
-                        else:
-                            state = data_pf.status_jduge_v1(state_code)
+                    # timestamp = day + ' ' + data[0]
+                    # state_code = data[1]
+                    # if len(value) == 1:
+                    #     if state_code == 0:
+                    #         state = 'dnc'
+                    #     else:
+                    #         state = data_pf.status_jduge_v1(state_code)
+                    # else:
+                    #     if state_code == 0 and index != 0:
+                    #         state = data_pf.status_jduge_v2(value[index-1][1], value[index][1])
+                    #     elif state_code == 0 and index == 0:
+                    #         state = data_pf.status_jduge_v2(value[index][1], value[index+1][1])
+                    #     else:
+                    #         state = data_pf.status_jduge_v1(state_code)
 
-                    ob_agg_data.append([sid, bid, lf, state, timestamp])
+                            
 
-        ob_agg_data = sorted(ob_agg_data, key = lambda x:x[4])
+        # ob_agg_data = sorted(ob_agg_data, key = lambda x:x[5])
 
-        # pf.save_pkl(f'./data/sensorTierProcessed{delta}.pkl', ob_agg_data)
-        # ob_agg_data = pf.load_pkl(f'./data/sensorTierProcessed{delta}.pkl')
+        # pf.save_pkl(f'./data/sensorTierProcessed.pkl', ob_agg_data)
+        ob_agg_data = pf.load_pkl(f'./data/sensorTierProcessed.pkl')
 
         return ob_agg_data
 
-    def systemTierAgg(self, ob_agg_data, rules_list, window_clock_size, raw_data_len):
-        window_size = timedelta(seconds=window_clock_size)
+    def systemTierAgg(self, ob_agg_data, rules_list, delta, window_clock_size, raw_data_len):
         test_data = data_pf.split_dataset(ob_agg_data)
         result_set = set(map(tuple, test_data))
 
@@ -168,8 +168,8 @@ class SuperAgg:
             
             column1_data = (row[2], row[1], row[0])
             
-            timestamp1 = datetime.strptime(row[4], '%Y-%m-%d %H:%M:%S')
-            endtime = timestamp1 + window_size
+            timestamp1 = int(row[5])
+            endtime = timestamp1 + window_clock_size
 
             for idx in range(index + 1, len(test_data)):
                 rows = test_data[idx]
@@ -178,7 +178,7 @@ class SuperAgg:
                 if column2_data == column1_data: # same alert
                     continue
 
-                timestamp2 = datetime.strptime(rows[4], '%Y-%m-%d %H:%M:%S')
+                timestamp2 = int(rows[5])
 
                 if timestamp2 > endtime:
                     break
@@ -189,7 +189,7 @@ class SuperAgg:
                     result_set.remove(tuple(rows))
 
         result = list(result_set)
-        result = sorted(result, key = lambda x:x[4])
+        result = sorted(result, key = lambda x:x[5])
 
         # pf.save_pkl(f'./data/systemTierProcessedData{delta}.pkl', result)
         # result = pf.load_pkl(f'./data/systemTierProcessedData{delta}.pkl')
@@ -211,13 +211,13 @@ class SuperAgg:
                 if timestamp >= split_timestamp:
                     y_true.append(row)
 
-        y_pred = [[i[0], i[1], i[2], i[3], str(int(datetime.strptime(i[4], "%Y-%m-%d %H:%M:%S").timestamp()))] for i in eval_data]
+        y_pred = [[i[0], i[1], i[2], i[4], i[5]] for i in eval_data]
         num = 0
         for i in y_true:
-            true_position = [i[0],i[1],i[2],i[3]]
+            true_position = [i[0], i[1], i[2], i[3]]
             true_ts = int(i[4])
             for j in y_pred:
-                pred_position = [j[0],j[1],j[2],j[3]]
+                pred_position = [j[0], j[1], j[2], j[3]]
                 pred_ts = int(j[4])
                 if true_position == pred_position and abs(true_ts - pred_ts) <= 2:
                     num += 1
@@ -239,15 +239,15 @@ class SuperAgg:
         print('delta: {}'.format(self.delta))
         raw_data_len = len(raw_data)
 
-        test_data = self.data_preprocess(raw_data, self.delta)
-        # test_data = pf.load_pkl('./data/tsData{}.pkl'.format(delta))
+        # test_data = self.data_preprocess(raw_data)
+        test_data = pf.load_pkl('./data/tsData.pkl')
 
-        starttime1 = time.perf_counter()
-        sensorTierProcessedDate = self.sensorTierAgg(test_data, self.delta)
-        endtime1 = time.perf_counter()
-        print('sensorTierTime: {:.4f}s'.format(endtime1 - starttime1))
+        # starttime1 = time.perf_counter()
+        sensorTierProcessedDate = self.sensorTierAgg(raw_data, test_data, self.delta)
+        # endtime1 = time.perf_counter()
+        # print('sensorTierTime: {:.4f}s'.format(endtime1 - starttime1))
 
-        starttime2 = time.perf_counter()
+        # starttime2 = time.perf_counter()
         _ = self.systemTierAgg(sensorTierProcessedDate, rules_list, self.delta, self.window_clock_size, raw_data_len)
-        endtime2 = time.perf_counter()
-        print('systemTierTime: {:.4f}s'.format(endtime2 - starttime2))
+        # endtime2 = time.perf_counter()
+        # print('systemTierTime: {:.4f}s'.format(endtime2 - starttime2))

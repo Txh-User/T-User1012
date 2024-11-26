@@ -79,8 +79,8 @@ def txt2time_series(txt_data):
     return csv_data
 
 def split_dataset(data):
-    split_time = datetime.strptime('2023-03-11 12:00:00', '%Y-%m-%d %H:%M:%S')
-    test_data = [i for i in data if datetime.strptime(i[4], '%Y-%m-%d %H:%M:%S') >= split_time]
+    split_time = int(datetime.strptime('2023-03-11 12:00:00', "%Y-%m-%d %H:%M:%S").timestamp())
+    test_data = [i for i in data if int(i[5]) >= split_time]
     return test_data
 
 def status_jduge_v0(a):
